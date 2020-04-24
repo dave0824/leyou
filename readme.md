@@ -1,0 +1,1 @@
+乐优商场项目，前后端分离开发，前端技术栈：vue+vuetify 后端技术栈：springboot+zuul+eureka+elasticsearch+hystrix
