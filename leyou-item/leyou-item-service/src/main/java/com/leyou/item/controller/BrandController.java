@@ -73,4 +73,15 @@ public class BrandController {
         brandService.deleteBrand(id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    /**
+     * 根据类别查找品牌列表
+     * @param cid
+     * @return
+     */
+    @GetMapping("/cid/{cid}")
+    public ResponseEntity<List<Brand>> findByCid(@PathVariable("cid")Long cid){
+
+        return ResponseEntity.ok( brandService.findByCid(cid));
+    }
 }

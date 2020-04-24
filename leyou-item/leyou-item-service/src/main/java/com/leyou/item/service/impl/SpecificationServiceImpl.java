@@ -62,4 +62,11 @@ public class SpecificationServiceImpl implements SpecificationService {
     public void deleteSpecParam(Long id) {
         specParamMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public List<SpecParam> querySpecParamsByCid(Long cid) {
+        SpecParam specParam = new SpecParam();
+        specParam.setCid(cid);
+        return specParamMapper.select(specParam);
+    }
 }

@@ -85,4 +85,16 @@ public class BrandServiceImpl implements BrandService {
         brandMapper.deleteCategoryAndBrand(bid);
         brandMapper.deleteByPrimaryKey(bid);
     }
+
+    /**
+     * 根据cid查找brand列表
+     * @param cid
+     * @return
+     */
+    @Override
+    public List<Brand> findByCid(Long cid) {
+        List<Long> bidList = brandMapper.findBidByCid(cid);
+        List<Brand> brands = brandMapper.selectByIdList(bidList);
+        return brands;
+    }
 }
