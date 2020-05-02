@@ -92,4 +92,14 @@ public class CategoryController {
     public ResponseEntity<List<Category>> queryCategoryNameByBid(@PathVariable("bid")Long bid){
         return ResponseEntity.ok(categoryService.queryCategoriesByBid(bid));
     }
+
+    /**
+     * 根据分类id查找分类名
+     * @param ids
+     * @return
+     */
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> queryCategoryNameByCids(@RequestParam("ids") List<Long> ids){
+        return ResponseEntity.ok(categoryService.queryCategoryNameByCids(ids));
+    }
 }

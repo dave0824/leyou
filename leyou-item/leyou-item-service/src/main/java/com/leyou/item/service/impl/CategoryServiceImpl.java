@@ -107,4 +107,17 @@ public class CategoryServiceImpl implements CategoryService {
         });
         return stringList;
     }
+
+    @Override
+    public List<String> queryCategoryNameByCids(List<Long> ids) {
+        List<Category> categoryList = categoryMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(categoryList)){
+            throw new LyException(ExceptionEnums.CATEGORY_NOT_FOUND);
+        }
+        ArrayList<String> names = new ArrayList<>();
+        categoryList.forEach(category -> {
+            names.add(category.getName());
+        });
+        return names;
+    }
 }

@@ -80,11 +80,11 @@ public class SpecificationController {
      * @param gid
      * @return
      */
-    @GetMapping("/params")
+   /* @GetMapping("/params")
     public ResponseEntity<List<SpecParam>> querySpecParamsByGid(@RequestParam("gid")Long gid){
 
         return ResponseEntity.ok( specificationService.querySpecParamsByGid(gid));
-    }
+    }*/
 
     /**
      * 新增参数
@@ -117,5 +117,23 @@ public class SpecificationController {
     public ResponseEntity<Void> deleteSpecParam(@PathVariable("id")Long id){
         specificationService.deleteSpecParam(id);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 根据参数查找规格参数
+     * @param gid
+     * @param cid
+     * @param generic
+     * @param searching
+     * @return
+     */
+    @GetMapping("params")
+    public ResponseEntity<List<SpecParam>> queryParams(
+            @RequestParam(value = "gid", required = false) Long gid,
+            @RequestParam(value = "cid", required = false) Long cid,
+            @RequestParam(value = "generic", required = false) Boolean generic,
+            @RequestParam(value = "searching", required = false) Boolean searching
+    ){
+        return ResponseEntity.ok(specificationService.queryParams(gid,cid,generic,searching));
     }
 }

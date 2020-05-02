@@ -84,4 +84,14 @@ public class BrandController {
 
         return ResponseEntity.ok( brandService.findByCid(cid));
     }
+
+    /**
+     * 根据商品id查找商品信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/id")
+    public ResponseEntity<Brand> findById(@RequestParam("id")Long id){
+        return ResponseEntity.ok(brandService.findById(id));
+    }
 }
