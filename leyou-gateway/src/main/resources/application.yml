@@ -9,9 +9,10 @@ eureka:
     service-url:
       defaultZone: http://127.0.0.1:10086/eureka
 zuul:
-  prefix: /client # 路由路径前缀
+  prefix: /api # 路由路径前缀
   routes:
     item-service: /item/** # 商品微服务的映射路径
+    search-service: /search/** # 搜索微服务的映射路径
     upload-service:
       path: /upload/**
       serivceId: upload-service

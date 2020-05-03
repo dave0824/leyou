@@ -1,17 +1,27 @@
 package com.leyou.search.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leyou.item.pojo.*;
+import com.leyou.page.PageResult;
 import com.leyou.search.client.BrandClient;
 import com.leyou.search.client.CategoryClient;
 import com.leyou.search.client.GoodsClient;
 import com.leyou.search.client.SpecificationClient;
 import com.leyou.search.pojo.Goods;
+import com.leyou.search.pojo.SearchRequest;
+import com.leyou.search.repository.GoodsRepository;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,6 +40,8 @@ public class SearchService {
 
     @Autowired
     private SpecificationClient specificationClient;
+    @Autowired
+    private GoodsRepository goodsRepository;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -131,4 +143,42 @@ public class SearchService {
         return result;
     }
 
+    /**
+     * 分页搜索商品信息
+     * @param searchRequest
+     * @return
+     */
+    public PageResult<Goods> search(SearchRequest searchRequest) {
+
+        // 1. 判断key为null.不让查所有
+        if (! StringUtils.isNotBlank(searchRequest.getKey())){
+            return null;
+        }
+
+        // 建立查询条件
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        // 添加全文检索
+        queryBuilder.withQuery(QueryBuilders.matchQuery("all",
+                searchRequest.getKey()).operator(Operator.AND));
+        // 判断是否排序
+        if (StringUtils.isNotBlank(searchRequest.getSortBy())){
+            queryBuilder.withSort(SortBuilders.fieldSort(searchRequest.getSortBy())
+                    .order(searchRequest.getDescending() ? SortOrder.DESC : SortOrder.ASC));
+        }
+
+        // 通过sourceFilter设置返回的结果字段,我们只需要id、skus、subTitle
+        queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"id","skus","subTitle"},null));
+
+        // 分页
+        int page = searchRequest.getPage();
+        int size = searchRequest.getSize();
+        queryBuilder.withPageable(PageRequest.of(page-1,size));
+
+        // 查询结果
+        Page<Goods> goodsPage = goodsRepository.search(queryBuilder.build());
+
+        // 封装返回结果
+        return new PageResult<>(goodsPage.getTotalPages(),goodsPage.getTotalElements(),goodsPage.getContent());
+
+    }
 }
