@@ -136,4 +136,14 @@ public class SpecificationController {
     ){
         return ResponseEntity.ok(specificationService.queryParams(gid,cid,generic,searching));
     }
+
+    /**
+     * 根据cid3查找参数组信息
+     * @param cid
+     * @return
+     */
+    @GetMapping("paramGroup")
+   public ResponseEntity<List<SpecGroup>> queryParamGroup(@RequestParam("cid")Long cid){
+        return ResponseEntity.ok(specificationService.queryGroupsByCid(cid));
+    }
 }

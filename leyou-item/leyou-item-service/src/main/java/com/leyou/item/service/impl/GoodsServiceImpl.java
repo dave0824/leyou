@@ -2,6 +2,8 @@ package com.leyou.item.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.leyou.enums.ExceptionEnums;
+import com.leyou.exception.LyException;
 import com.leyou.item.mapper.*;
 import com.leyou.item.pojo.Sku;
 import com.leyou.item.pojo.Spu;
@@ -158,6 +160,15 @@ public class GoodsServiceImpl implements GoodsService {
 
         // 更新spu详情
         this.spuDetailMapper.updateByPrimaryKeySelective(spuBo.getSpuDetail());
+    }
+
+    @Override
+    public Spu findSpuById(Long id) {
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+        if (spu == null){
+            throw new LyException(ExceptionEnums.GOODS_NOT_FUND);
+        }
+        return spu;
     }
 
     /**
