@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: search-service
+  rabbitmq:
+    host: 192.168.198.128
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
   jackson:
     default-property-inclusion: non_null # 配置json处理时忽略空值
   data:

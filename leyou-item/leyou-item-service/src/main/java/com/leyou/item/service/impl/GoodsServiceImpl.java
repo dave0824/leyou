@@ -14,6 +14,8 @@ import com.leyou.item.service.CategoryService;
 import com.leyou.item.service.GoodsService;
 import com.leyou.page.PageResult;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,8 @@ public class GoodsServiceImpl implements GoodsService {
     private SkuMapper skuMapper;
     @Autowired
     private StockMapper stockMapper;
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     /**
      * 查询商品spu信息，返回spubo，要根据cid和bid查出对应名称
@@ -107,6 +111,9 @@ public class GoodsServiceImpl implements GoodsService {
 
         // 保存sku和stock
         saveSkuAndStock(spuBo);
+
+        // 发送消息
+        sendMessage(spuBo.getId(),"insert");
     }
 
     @Override
@@ -160,6 +167,9 @@ public class GoodsServiceImpl implements GoodsService {
 
         // 更新spu详情
         this.spuDetailMapper.updateByPrimaryKeySelective(spuBo.getSpuDetail());
+
+        // 发送消息
+        sendMessage(spuBo.getId(),"update");
     }
 
     @Override
@@ -190,5 +200,19 @@ public class GoodsServiceImpl implements GoodsService {
             stockMapper.insertSelective(stock);
         });
 
+    }
+
+    /**
+     * 发送消息到rabbitmq
+     * @param id
+     * @param type
+     */
+    private void sendMessage(Long id, String type){
+        // 发送消息
+        try {
+            this.amqpTemplate.convertAndSend("item." + type, id);
+        } catch (Exception e) {
+            System.out.println("{}商品消息发送异常，商品id：{}"+ type + id + e);
+        }
     }
 }

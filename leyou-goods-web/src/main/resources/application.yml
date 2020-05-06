@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: goods-web
+  rabbitmq:
+    host: 192.168.198.128
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
   # 多个接口上的@FeignClient(“相同服务名”)会报错，overriding is disabled。
   # 设置 为true ,即 允许 同名
   main:

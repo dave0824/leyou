@@ -73,4 +73,9 @@ public class GoodsHtmlService {
             }
         });*/
     }
+
+    public void deleteHtml(Long id) {
+        File file = new File("G:\\works\\springboot\\html\\" + id + ".html");
+        file.deleteOnExit();
+    }
 }

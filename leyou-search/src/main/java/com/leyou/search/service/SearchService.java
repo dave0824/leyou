@@ -181,4 +181,27 @@ public class SearchService {
         return new PageResult<>(goodsPage.getTotalPages(),goodsPage.getTotalElements(),goodsPage.getContent());
 
     }
+
+    /**
+     * 创建或修改一条记录到索引库
+     * @param id
+     * @throws IOException
+     */
+    public void createIndex(Long id) throws IOException {
+
+        Spu spu = this.goodsClient.findSpuById(id);
+        // 构建商品
+        Goods goods = this.buildGoods(spu);
+
+        // 保存数据到索引库
+        goodsRepository.save(goods);
+    }
+
+    /**
+     * 删除对应的spu,根据id
+     * @param id
+     */
+    public void deleteIndex(Long id) {
+        goodsRepository.deleteById(id);
+    }
 }
