@@ -13,7 +13,8 @@ public enum  ExceptionEnums {
     UPDATE_CATEGORY_FAIL(500,"跟新类别失败"),
     DELETE_CATEGORY_FAIL(500,"删除类别失败"),
     CATEGORY_NOT_FOUND(404,"商品类型没找到"),
-    GOODS_NOT_FUND(404,"商品没找到")
+    GOODS_NOT_FUND(404,"商品没找到"),
+    USER_DATA_ARGS_ERROR(400,"参数有误"),
     ;
     private int code;
     private String msg;
