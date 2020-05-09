@@ -14,10 +14,13 @@ zuul:
     item-service: /item/** # 商品微服务的映射路径
     search-service: /search/** # 搜索微服务的映射路径
     user-service: /user/** # 用户服务
+    auth-service: /auth/** # 授权中心微服务
     upload-service:
       path: /upload/**
       serivceId: upload-service
       strip-prefix: false
+  add-host-header: true #携带请求本身的head头信息
+  sensitive-headers:  #配置禁止使用的头信息，这里设置为null,否则set-cookie无效
 hystrix:
   command:
     default:
@@ -30,3 +33,16 @@ ribbon:
   ReadTimeout: 3500 # 读取超时时长
   MaxAutoRetries: 0 # 服务重试次数
   MaxAutoRetriesNextServer: 0 # 切换服务重试次数
+
+leyou:
+  jwt:
+    pubKeyPath: G:\works\springboot\rsa\rsa.pub # 公钥地址
+    cookieName: LY_TOKEN
+  filter:
+    allowPaths:
+    - /api/auth
+    - /api/search
+    - /api/user/register
+    - /api/user/check
+    - /api/user/code
+    - /api/item
