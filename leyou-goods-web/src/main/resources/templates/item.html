@@ -206,7 +206,7 @@
                             <div class="fl">
                                 <ul class="btn-choose unstyled">
                                     <li>
-                                        <a href="#" @click.prevent="addCart()" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
+                                        <a href="javascript:void(0)" @click.prevent="addCart()" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
                                     </li>
                                 </ul>
                             </div>
@@ -312,7 +312,7 @@
                                             </strong>
                                         </div>
                                         <div class="operate">
-                                            <a href="javascript:void(0);" class="sui-btn btn-bordered">加入购物车</a>
+                                            <a href="javascript:void(0);" class="sui-btn btn-bordered" >加入购物车</a>
                                         </div>
                                     </div>
                                     <div class="list-wrap">
@@ -660,7 +660,7 @@
         addCart(){
             ly.verify().then(res => {
                 // 登陆状态下的购物车
-                ly.http.post("/cart", {skuId: this.sku.id, num: this.num}).then(res => {
+                ly.http.post("/cart", {skuId: this.sku.id, title:this.sku.title,image:this.images ? this.images[0] : "",price:this.sku.price,ownSpec:this.sku.ownSpec,num: this.num}).then(res => {
                 window.location = "http://www.leyou.com/cart.html";
         });
         }).catch(()=>{
